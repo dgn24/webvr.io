@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras.ocean@%5E3.5.x/dist/aframe-extras.ocean.min.js"></script>
+    <script src="https://unpkg.com/aframe-gradient-sky@1.0.4/dist/gradientsky.min.js"></script>
+  </head>
+ 
+  <body>
+    <script>
+     AFRAME.registerComponent('change-color-on-hover', {
+            schema: {
+              color: {default: 'black'}
+            },
+    
+            init: function () {
+              var data = this.data;
+              var el = this.el;  // <a-box>
+              var defaultColor = el.getAttribute('material').color;
+    
+              el.addEventListener('mouseenter', function () {
+                el.setAttribute('color', data.color);
+              });
+    
+              el.addEventListener('mouseleave', function () {
+                el.setAttribute('color', defaultColor);
+              });
+            }
+          });
+        </script>
+
+        <!--A-Frame alles innerhalb der SCENE-->
+        <a-scene>
+
+            <!--camera-->
+            <a-entity position="15 4 -15"><a-camera><a-cursor color="red"></a-cursor></a-camera></a-entity>
+
+            <!--Ocean-->
+            <a-entity id="ocean" ocean="density: 40; width: 200; depth: 200; speed: 4"
+                      material="color: ##0040FF; opacity: 0.75; metalness: 0; roughness: 4"
+                      rotation="-90 0 0">
+                      <a-plane animation = "none" position= "-145 1 -145" color="#0A2A0A" height="200" width="200"></a-plane>
+                      <a-box position= "-145 1 -145" heigt="20" width = "10" ></a-box>
+                      
+            </a-entity>
+
+            <!--light-->
+            <a-entity light="type: ambient; color: #2E2EFE"></a-entity>
+            <a-light intensity="1" color="#00ffff" position="-5.72 6.65 0.80" animation__color="property:color; dir:alternate; dur:4000; easing:easeInOutSine; loop:true; to:#ff0000" ></a-light>
+            
+
+            <!--snow-->
+            <a-entity id="snow" particle-system="preset: snow; color: #58D3F7; particleCount: 10000"></a-entity>
+
+            <!--SKY-->
+            <a-assets><img id="sky" src="sky.jpg"></a-assets>
+              <a-sky src="#sky"></a-sky>
+
+            <!--shapes-->
+            <a-assets><img id="shark" src="shark1.jpg"></a-assets>
+            <a-assets><img id="haiflosse" src="haiflosse.png"></a-assets>
+
+            <a-sphere src="#shark" position="15 0,15 -1" radius="1" color="#DF0101" change-color-on-hover="color: yellow" light="type: point; intensity: 5"
+                        animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 5000; to: 0 -0.10 -5; loop: true">
+                        <a-animation attribute= "visible" to="false" begin="click"> </a-animation> </a-sphere>
+           
+            <a-sphere rotation= "0 300 0" src= "#shark" color="#2E9AFE" position="0 1 -4" change-color-on-hover="color: FA5858"> 
+                <a-animation attribute= "visible" to="false" begin="click"> </a-animation> 
+            </a-sphere>
+                
+
+            <a-octahedron 
+                      geometry="primitive: octahedron"
+                      src= "#haiflosse"
+                      material="color: #31B404; shader: flat"
+                      position="0 0.15 -25"
+                      light="type: point; intensity: 2"
+                      change-color-on-hover: "color: #green"
+                      animation="property: position; easing: easeInOutQuad; dir: alternate; dur: 5000; to: 0 -0.10 -5; loop: true">
+             </a-octahedron>
+
+
+      </a-scene>
+  </body>
+</html>
